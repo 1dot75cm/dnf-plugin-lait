@@ -1,0 +1,113 @@
+config_opts['root'] = 'fedora-@RELEASE@-@ARCH@'
+config_opts['target_arch'] = '@ARCH@'
+config_opts['legal_host_arches'] = ('@ARCH@',)
+config_opts['chroot_setup_cmd'] = 'install @buildsys-build'
+config_opts['dist'] = 'fc@RELEASE@'  # only useful for --resultdir variable subst
+config_opts['extra_chroot_dirs'] = [ '/run/lock', ]
+config_opts['releasever'] = '@RELEASE@'
+
+config_opts['yum.conf'] = """
+[main]
+keepcache=1
+debuglevel=2
+reposdir=/dev/null
+logfile=/var/log/yum.log
+retries=20
+obsoletes=1
+gpgcheck=0
+assumeyes=1
+syslog_ident=mock
+syslog_device=
+install_weak_deps=0
+metadata_expire=0
+
+# repos
+[fedora]
+name=fedora
+metalink=https://mirrors.fedoraproject.org/metalink?repo=fedora-$releasever&arch=$basearch
+failovermethod=priority
+enabled=1
+gpgkey=file:///etc/pki/mock/RPM-GPG-KEY-fedora-$releasever-primary
+gpgcheck=0
+
+[updates]
+name=updates
+metalink=https://mirrors.fedoraproject.org/metalink?repo=updates-released-f$releasever&arch=$basearch
+failovermethod=priority
+enabled=1
+gpgkey=file:///etc/pki/mock/RPM-GPG-KEY-fedora-$releasever-primary
+gpgcheck=0
+
+[updates-testing]
+name=updates-testing
+metalink=https://mirrors.fedoraproject.org/metalink?repo=updates-testing-f$releasever&arch=$basearch
+failovermethod=priority
+enabled=1
+gpgcheck=0
+
+[lait]
+name=created by dnf lait for local repo
+baseurl=file:////var/cache/dnf/specs/Output/$releasever/$basearch/
+enabled=1
+gpgcheck=0
+
+[fzug-free]
+name=FZUG fc$releasever - Free
+baseurl=https://repo.fdzh.org/FZUG/free/$releasever/$basearch/
+gpgcheck=0
+enabled=0
+
+[fzug-nonfree]
+name=FZUG fc$releasever - Nonfree
+baseurl=https://repo.fdzh.org/FZUG/nonfree/$releasever/$basearch/
+gpgcheck=0
+enabled=0
+
+[fzug-testing]
+name=FZUG fc$releasever - Testing
+baseurl=https://repo.fdzh.org/FZUG/testing/$releasever/$basearch/
+gpgcheck=0
+enabled=0
+
+[fzug-rpmfusion]
+name=FZUG fc$releasever - Rpmfusion
+baseurl=https://repo.fdzh.org/FZUG/rpmfusion/$releasever/$basearch/
+gpgcheck=0
+enabled=0
+
+[rpmfusion-free]
+name=RPM Fusion for Fedora $releasever - Free
+#baseurl=http://download1.rpmfusion.org/free/fedora/releases/$releasever/Everything/$basearch/os/
+mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-$releasever&arch=$basearch
+enabled=0
+
+[rpmfusion-nonfree]
+name=RPM Fusion for Fedora $releasever - NonFree
+#baseurl=http://download1.rpmfusion.org/nonfree/fedora/releases/$releasever/Everything/$basearch/os/
+mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-$releasever&arch=$basearch
+enabled=0
+
+[rpmfusion-free-updates]
+name=RPM Fusion for Fedora $releasever - Free - Updates
+#baseurl=http://download1.rpmfusion.org/free/fedora/updates/$releasever/$basearch/
+mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-updates-released-$releasever&arch=$basearch
+enabled=0
+
+[rpmfusion-nonfree-updates]
+name=RPM Fusion for Fedora $releasever - NonFree - Updates
+#baseurl=http://download1.rpmfusion.org/nonfree/fedora/updates/$releasever/$basearch/
+mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-updates-released-$releasever&arch=$basearch
+enabled=0
+
+[rpmfusion-free-updates-testing]
+name=RPM Fusion for Fedora $releasever - Free - Test Updates
+#baseurl=http://download1.rpmfusion.org/free/fedora/updates/testing/$releasever/$basearch/
+mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-updates-testing-$releasever&arch=$basearch
+enabled=0
+
+[rpmfusion-nonfree-updates-testing]
+name=RPM Fusion for Fedora $releasever - NonFree - Test Updates
+#baseurl=http://download1.rpmfusion.org/nonfree/fedora/updates/testing/$releasever/$basearch/
+mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-updates-testing-$releasever&arch=$basearch
+enabled=0
+"""
